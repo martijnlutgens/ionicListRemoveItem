@@ -27,6 +27,7 @@ export class HomePage {
         handler: () => {
           setTimeout(() => {
             this.itemlist.splice(this.itemlist.length-1, 1);
+            this.itemlist = [...this.itemlist];
           }, 500);
         }
       }, {
