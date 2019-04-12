@@ -12,13 +12,13 @@ export class HomePage {
 
   }
 
-  itemlist: Array<any> = [];
+  itemlist: Array<number> = [];
 
   addItem() {
     this.itemlist.push(this.itemlist.length);
   }
 
-  removeItem(item) {
+  removeItem() {
     this.alertController.create({
       header: 'Delete?',
       message: 'Do you want to delete the last item ?',

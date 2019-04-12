@@ -1,39 +1,44 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-list',
   templateUrl: 'list.page.html',
   styleUrls: ['list.page.scss']
 })
-export class ListPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+export class ListPage {
+  constructor(public alertController: AlertController) {
+
   }
 
-  ngOnInit() {
+  items$: BehaviorSubject<Array<number>> = new BehaviorSubject([]);
+  itemlist: Array<number> = [];
+
+  addItem() {
+    this.itemlist.push(this.itemlist.length);
+    this.items$.next([...this.itemlist]);
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+
+  removeItem() {
+    this.alertController.create({
+      header: 'Delete?',
+      message: 'Do you want to delete the last item ?',
+      buttons: [{
+        text: 'Yes',
+        handler: () => {
+          setTimeout(() => {
+            this.itemlist.splice(this.itemlist.length-1, 1);
+            this.itemlist = [...this.itemlist];
+            this.items$.next([...this.itemlist]);
+          }, 500);
+        }
+      }, {
+        text: 'Cancel',
+        role: 'cancel'
+      }]
+    }).then(alert => {
+      alert.present();
+    });
+  }
 }
